@@ -3,3 +3,18 @@
 ################################################################################
 
 /Infrastructure/bin
+/Infrastructure/obj
+/Infrastructure.Hangfire/bin/Debug/netcoreapp3.1
+/Infrastructure.Hangfire/obj
+/Samples.Manager.Api/bin/Debug/netcoreapp3.1
+/Samples.Manager.Api/obj
+/Samples.Repository/bin/Debug/netcoreapp3.1
+/Samples.Repository/obj
+/Samples.Service.APP/bin/Debug/netcoreapp3.1
+/Samples.Service.APP/obj
+/Samples.Service.Domain/bin/Debug/netcoreapp3.1
+/Samples.Service.Domain/obj
+/Samples.WebService/bin/Debug/netcoreapp3.1
+/Samples.WebService/obj
+/TConsole/bin/Debug/netcoreapp3.1
+/TConsole/obj

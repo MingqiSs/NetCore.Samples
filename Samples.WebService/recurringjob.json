@@ -1,0 +1,7 @@
+[
+  {
+    "job-name": "TestJob",
+    "cron-expression": "*/5 * * * *",
+    "queue": "jobs"
+  }
+]
