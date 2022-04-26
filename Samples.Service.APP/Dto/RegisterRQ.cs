@@ -69,19 +69,7 @@ namespace Samples.Service.APP.Dto
         /// <summary>
         /// 区号
         /// </summary>
-        public string AreaCode { get; set; } = "86";
-        /// <summary>
-        /// 设备名称 
-        /// </summary>
-        public string DeviceName { get; set; }
-        /// <summary>
-        /// 设备系统
-        /// </summary>
-        public string DeviceSystem { get; set; }
-        /// <summary>
-        /// 设备型号 
-        /// </summary>
-        public string DeviceType { get; set; }
+        public string AreaCode { get; set; } = "86";      
     }
     /// <summary>
     /// 
