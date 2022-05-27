@@ -19,3 +19,16 @@
 /TConsole/bin/Debug/netcoreapp3.1
 /TConsole/obj
 /.vs/NetCore.Samples/v17
+/Console/ElasticsearchDemo/bin/Debug/netcoreapp3.1
+/Console/ElasticsearchDemo/obj
+/Console/KafkaConsumerDome/bin/Debug/netcoreapp3.1
+/Console/KafkaConsumerDome/obj
+/Console/KafkaProducerDome/bin/Debug/netcoreapp3.1
+/Console/KafkaProducerDome/obj
+/Console/KF.ElasticSearch/bin/Debug/netcoreapp3.1
+/Console/MongoDBDemo/bin/Debug/netcoreapp3.1
+/Console/MongoDBDemo/obj
+/SignalRDemo/bin/Debug/netcoreapp3.1
+/SignalRDemo/obj
+/.vs/NetCore.Samples/FileContentIndex
+/.vs/NetCore.Samples/config/applicationhost.config
