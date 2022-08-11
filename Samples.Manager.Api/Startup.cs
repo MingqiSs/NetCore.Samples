@@ -19,7 +19,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Samples.Service.APP.Interface;
 using Samples.Service.APP.Common;
-
+using Infrastructure.Config;
 
 namespace Samples.Manager.Api
 {
@@ -35,21 +35,6 @@ namespace Samples.Manager.Api
        // public ILifetimeScope AutofacContainer { get; private set; }
         public IConfiguration Configuration { get; }
 
-        #region net core 2.1
-        //public IServiceProvider ConfigureServices(IServiceCollection services)
-        //{
-        //    services.AddControllers();
-        //    AutoMapper Settings
-        //    services.AddAutoMapperSetup();
-        //    Add Autofac
-        //    var builder = new ContainerBuilder();
-        //    builder.RegisterModule();
-
-        //    builder.Populate(services);
-        //    AutofacContainer = builder.Build();
-        //    return new AutofacServiceProvider(AutofacContainer);
-        //}
-        #endregion
         // This method gets called by the runtime. Use this method to add services to the container.
         /// <summary>
         /// 
@@ -57,15 +42,45 @@ namespace Samples.Manager.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-         
+            
             services.AddMvc().AddMvcOptions(options =>
             {
                 options.Filters.Add(typeof(TimmerFilter));
-                options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+              //  options.Filters.Add(typeof(CustomExceptionFilterAttribute));
                 options.Filters.Add(typeof(AuthActionFilter)); 
             });
            
             services.AddHttpContextAccessor();
+
+            #region Nacos服务发现,配置中心
+            services.AddHttpClient();
+
+            var addList = new List<string>
+            {
+               ""
+            };
+            var dic = new Dictionary<string, string>
+            {
+                { "version", "V1.0.0" }
+            };
+            services.AddNacosAspNetCore(
+            options =>
+            {
+                options.ServiceName = "nacos-service-demo";//注册服务名
+                options.ServerAddresses = addList;
+                options.Weight = 100;
+                options.DefaultTimeOut = 15000;
+                options.Metadata = dic;
+                options.Port = 9898;
+            }, nacosOption =>
+            {
+                nacosOption.DefaultTimeOut = 15000;
+                nacosOption.ServerAddresses = addList;
+                nacosOption.ListenInterval = 5000;
+            });
+            // services.AddHostedService<ListenConfigurationBgTask>();
+            #endregion
+
 
             services.AddControllers();
 
@@ -76,14 +91,13 @@ namespace Samples.Manager.Api
             services.AddDatabaseSetup(Configuration);
 
             services.AddAutofac();
-
             services.AddHttpClient<IHttpClientService, HttpClientService>();
 
-            //services.AddCors(option => option.AddPolicy("samples", policy => policy.AllowAnyHeader()
-            //                                                                     .AllowAnyMethod()
-            //                                                                     .AllowCredentials()
-            //                                                                     .WithOrigins()
-            //                                                                     ));
+            services.AddCors(option => option.AddPolicy("samples", policy => policy.AllowAnyHeader()
+                                                                                 .AllowAnyMethod()
+                                                                                 .AllowCredentials()
+                                                                                 .WithOrigins()
+                                                                                 ));
             #region 注册 日志
             services.AddLogging(t => t.AddNLog());
             #endregion

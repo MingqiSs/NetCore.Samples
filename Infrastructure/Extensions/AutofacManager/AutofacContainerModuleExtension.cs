@@ -53,6 +53,9 @@ namespace Infrastructure.AutofacManager
              .InstancePerLifetimeScope();
 
             builder.RegisterType<UserContext>().InstancePerLifetimeScope();
+
+            builder.RegisterBuildCallback(container => AutofacContainerModule.container = container);
+
         }
     }
 }

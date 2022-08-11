@@ -13,6 +13,7 @@ using Samples.Service.APP.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Samples.Manager.Api.Controllers
@@ -102,7 +103,7 @@ namespace Samples.Manager.Api.Controllers
             var userinfo = await _userService.GetUserInfoAsync(uid);
 
             return Ok(userinfo);
-        }
+        }      
         /// <summary>
         /// 
         /// </summary>

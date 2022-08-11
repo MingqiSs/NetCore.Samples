@@ -31,5 +31,6 @@
     <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
     <PackageReference Include="xFFmpeg.NET" Version="3.4.0" />
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.6.7" />
+    <PackageReference Include="nacos-sdk-csharp-unofficial.AspNetCore" Version="0.8.5" />
   </ItemGroup>
 </Project>

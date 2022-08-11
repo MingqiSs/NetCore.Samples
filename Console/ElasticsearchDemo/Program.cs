@@ -17,6 +17,10 @@ namespace ElasticsearchDemo
         public static IEsIndexService _esIndexService;
         static async Task Main(string[] args)
         {
+            var now = DateTime.Now;
+            var nowstr = now.ToString();
+          var  vcTime = Convert.ToDateTime(nowstr).ToString("yyyy.MM");
+
             var serviceProvider = GetServiceProvider();
               _esClientService = serviceProvider.GetService<IEsClientService>();
               _esIndexService = serviceProvider.GetService<IEsIndexService>();

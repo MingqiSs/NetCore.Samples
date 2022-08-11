@@ -1,11 +1,13 @@
 ﻿using Infrastructure.CacheManager;
 using Infrastructure.Config;
 using Infrastructure.Utilities;
+using Infrastructure.Utilities.PDFReport;
 using Samples.Service.APP.BaseProvider;
 using Samples.Service.APP.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Samples.Service.APP.Common
 {
@@ -44,6 +46,18 @@ namespace Samples.Service.APP.Common
             if (code == "12345" && AppSetting.GetConfigBoolean("Samples:IsDevelopment")) return true;//通用万能验证码
             errmsg = "验证码已过期，请重新获取";
             return false;
+        }
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <returns></returns>
+        public void PdfDemo()
+        {
+            string tempFilePath = @"D:\demo\test1.pdf";
+            string createdPdfPath = @"D:\demo\test2.pdf";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            PdfHelper.PutContentV2(tempFilePath, createdPdfPath, parameters);
         }
     }
 }

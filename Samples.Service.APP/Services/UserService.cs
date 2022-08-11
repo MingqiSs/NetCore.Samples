@@ -1,4 +1,5 @@
-﻿using Infrastructure.DEncrypt;
+﻿using Infrastructure.CacheManager;
+using Infrastructure.DEncrypt;
 using Infrastructure.Enums;
 using Infrastructure.Models;
 using Infrastructure.Utilities;
@@ -23,14 +24,16 @@ namespace Samples.Service.APP.Services
     public partial class UserService : BaseSerivceDomin<McUser, IBookStoreRepository<McUser>>, IUserService
     {
         private readonly ICommonService _commonService;
+        private readonly IHttpClientService _httpClientService;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="commonService"></param>
-        public UserService(IUserDomainService repository, ICommonService commonService) : base(repository)
+        public UserService(IUserDomainService repository, ICommonService commonService, IHttpClientService httpClientService) : base(repository)
         {
             _commonService = commonService;
+            _httpClientService = httpClientService;
         }
         /// <summary>
         /// 发送验证码
@@ -41,13 +44,14 @@ namespace Samples.Service.APP.Services
         {
             //1.手机号,2邮箱
             var receiverType = 0;
+           var s= CacheContext.Cache.Exists($"SMSCode");
             rq.Receiver = rq.Receiver.Trim().ToLower();//统一转为小写
             if (RegexHelper.Check(rq.Receiver, EnumPattern.Email))
             {
                 receiverType = 2;
                 if (rq.Receiver.Length > 50) return Result<bool>(ResponseCode.sys_param_format_error, "邮箱长度不能大于50");
             }
-            else if (rq.AreaCode == "86" && RegexHelper.Check(rq.Receiver, EnumPattern.Mobile)) 
+            else if (rq.AreaCode == "86" && RegexHelper.Check(rq.Receiver, EnumPattern.Mobile))
             {
                 receiverType = 1;
             }
@@ -94,7 +98,7 @@ namespace Samples.Service.APP.Services
             {
                 return Result<RegisterRP>(ResponseCode.sys_verify_failed, "请输入接收到的验证码");
             }
-            
+
             var isSave = false;
             var pwd = AESEncrypt.Encrypt(rq.Pwd, AESEncrypt.pwdKey);
             var receiverEncrypt = AESEncrypt.Encrypt(rq.Name, AESEncrypt.infoKey);
@@ -153,7 +157,7 @@ namespace Samples.Service.APP.Services
             result.UID = user.Uid;
             result.Account = user.Account;
             result.Name = user.Name;
-            result.Mobile =String.IsNullOrEmpty(user.Mobile)?String.Empty : AESEncrypt.Decrypt(user.Mobile, AESEncrypt.infoKey);
+            result.Mobile = String.IsNullOrEmpty(user.Mobile) ? String.Empty : AESEncrypt.Decrypt(user.Mobile, AESEncrypt.infoKey);
             result.AreaCode = user.AreaCode;
             result.Email = String.IsNullOrEmpty(user.Email) ? String.Empty : AESEncrypt.Decrypt(user.Email, AESEncrypt.infoKey);
 
@@ -167,7 +171,7 @@ namespace Samples.Service.APP.Services
         /// <returns></returns>
         public async Task<ResultDto<UserInfoRP>> LoginAsync(UserLoginRQ rq)
         {
-            McUser user=new McUser();
+            McUser user = new McUser();
             // 1.手机号,2邮箱
             var receiverType = RegexHelper.Check(rq.Name, EnumPattern.Email) == true ? 2 : 1;
             if (rq.Type == (byte)LoginType.VCode)
@@ -188,11 +192,12 @@ namespace Samples.Service.APP.Services
                 user = await repository.FindSingleAsync<McUser>(q => (q.Mobile == receiverEncrypt && q.AreaCode == rq.AreaCode) && q.DataStatus != (byte)EnumDataStatus.Delete);
             }
             if (user == null && rq.Type == (byte)LoginType.Pwd) return Result<UserInfoRP>(ResponseCode.sys_fail, "请先注册");
-            
+
             var result = await GetUserInfoAsync(user.Uid);
-          
+
 
             return result;
         }
+     
     }
 }

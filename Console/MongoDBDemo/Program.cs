@@ -19,7 +19,21 @@ namespace MongoDBDemo
             await FindListAsync();
 
             Console.ReadLine();
+          var doc=  new BsonArray
+            {
+                new BsonDocument("$match",
+                new BsonDocument
+                    {
+                        { "vcOperatorNo", "1527224445704286208" },
+                        { "vcMerChantNo", "1241985555798124192" }
+                    }),
+                new BsonDocument("$limit", 10)
+            };
 
+          var db=   MongoDbHelper.Instance()._database;
+
+          var coll = db.GetCollection<BsonDocument>(nameof(SQ_UserTest));
+           // var result = coll.Find<BsonDocument>(doc).ToList();
         }
         /// <summary>
         /// 获取数量
@@ -36,6 +50,7 @@ namespace MongoDBDemo
 
             Console.WriteLine($"获取数量 {nCount}");
         }
+    
         /// <summary>
         /// 修改
         /// </summary>

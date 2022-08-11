@@ -17,7 +17,7 @@ namespace Infrastructure.CacheManager
             get
             {
                 if (_Cache != null) return _Cache;
-                _Cache = AutofacContainerModule.GetService<ICacheService>();
+                _Cache = AutofacContainerModule.Resolve<ICacheService>();
                 return _Cache;
             }
         }

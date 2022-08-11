@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Infrastructur.AutofacManager;
+using Microsoft.Extensions.Logging;
 using Samples.Service.APP.Interface;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Samples.Service.APP.Common
@@ -12,7 +15,7 @@ namespace Samples.Service.APP.Common
     /// <summary>
     /// http服务
     /// </summary>
-    public class HttpClientService : IHttpClientService
+    public class HttpClientService : IHttpClientService,IDependency
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<HttpClientService> _logger;
@@ -79,6 +82,7 @@ namespace Samples.Service.APP.Common
                 {
                     client = _clientFactory.CreateClient(key);
                 }
+               
                 if (!string.IsNullOrEmpty(hostUrl)) client.BaseAddress = new Uri(hostUrl);
                 var result = await client.PostAsync(requestMethodUrl, contentPost);
                 if (result.IsSuccessStatusCode)
@@ -107,11 +111,23 @@ namespace Samples.Service.APP.Common
                 HttpContent contentPost = new StringContent(data, Encoding.UTF8, "application/json");
                 HttpClient client = _clientFactory.CreateClient();
                 client.BaseAddress = new Uri(hostUrl);
-                var result = await client.PostAsync(requestMethodUrl, contentPost);
+             //   client.Timeout = TimeSpan.FromMilliseconds(1000);
+               // var result = await client.PostAsync(requestMethodUrl, contentPost);
+                var request = new HttpRequestMessage(HttpMethod.Post, requestMethodUrl);            
+                var result = await client.SendAsync(request);
                 if (result.IsSuccessStatusCode)
                 {
                     return await result.Content.ReadAsStringAsync();
                 }
+            }
+
+            catch (System.TimeoutException ex)
+            {
+
+            }
+            catch (TaskCanceledException ex)
+            { 
+            
             }
             catch (Exception ex)
             {
