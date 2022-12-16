@@ -1,7 +1,9 @@
-﻿using Infrastructure.CacheManager;
+﻿using AutoMapper;
+using Infrastructure.CacheManager;
 using Infrastructure.Config;
 using Infrastructure.Utilities;
 using Infrastructure.Utilities.PDFReport;
+using Samples.Service.APP.AutoMapper;
 using Samples.Service.APP.BaseProvider;
 using Samples.Service.APP.Interface;
 using System;
@@ -47,17 +49,6 @@ namespace Samples.Service.APP.Common
             errmsg = "验证码已过期，请重新获取";
             return false;
         }
-        /// <summary>
-        /// 登录
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        public void PdfDemo()
-        {
-            string tempFilePath = @"D:\demo\test1.pdf";
-            string createdPdfPath = @"D:\demo\test2.pdf";
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            PdfHelper.PutContentV2(tempFilePath, createdPdfPath, parameters);
-        }
+   
     }
 }

@@ -5,6 +5,7 @@ using Infrastructure.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nacos;
+using Samples.Service.APP.AutoMapper;
 using Samples.Service.APP.Interface;
 using System;
 using System.Threading;
@@ -25,13 +26,14 @@ namespace Samples.Manager.Api.Controllers
         private readonly IHttpClientService _httpClientService;
         private readonly IUserService _userService;
         private readonly ICommonService _commonService;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="nacosConfigClient"></param>
-        /// <param name="httpClientService"></param>
-        /// <param name="userService"></param>
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="logger"></param>
+       /// <param name="nacosConfigClient"></param>
+       /// <param name="httpClientService"></param>
+       /// <param name="userService"></param>
+       /// <param name="commonService"></param>
         public NacosController(ILogger<NacosController> logger, 
             INacosConfigClient nacosConfigClient, 
             IHttpClientService httpClientService,
@@ -64,36 +66,6 @@ namespace Samples.Manager.Api.Controllers
             });
         
             return  res;
-        }
-
-        
-        /// <summary>
-        /// 測試
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        [HttpPost, Route("W201")]
-        [ProducesResponseType(typeof(string), 200)]
-        public async Task<IActionResult> SendTestAsync()
-        {
-            var data = await _httpClientService.PostAsync("http://localhost:19030", "/v1/W202", String.Empty);
-
-            return Ok(data);
-        }
-
-        /// <summary>
-        /// 測試
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        [HttpPost, Route("W202")]
-        [ProducesResponseType(typeof(string), 200)]
-        public IActionResult GetTestAsync()
-        {
-             Thread.Sleep(80000);
-          //  throw new Exception();
-           // _commonService.PdfDemo();
-            return Ok("ok");
-        }
+        }    
     }
 }

@@ -34,3 +34,5 @@
 /.vs/NetCore.Samples/config/applicationhost.config
 /.vs/ProjectEvaluation
 /.vs/NetCore.Samples/DesignTimeBuild
+/Console/KF.ElasticSearch/obj/Debug/netcoreapp3.1
+/Console/KF.ElasticSearch/obj

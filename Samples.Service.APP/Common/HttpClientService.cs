@@ -111,7 +111,7 @@ namespace Samples.Service.APP.Common
                 HttpContent contentPost = new StringContent(data, Encoding.UTF8, "application/json");
                 HttpClient client = _clientFactory.CreateClient();
                 client.BaseAddress = new Uri(hostUrl);
-             //   client.Timeout = TimeSpan.FromMilliseconds(1000);
+                client.Timeout = TimeSpan.FromMilliseconds(1000);
                // var result = await client.PostAsync(requestMethodUrl, contentPost);
                 var request = new HttpRequestMessage(HttpMethod.Post, requestMethodUrl);            
                 var result = await client.SendAsync(request);
@@ -125,7 +125,7 @@ namespace Samples.Service.APP.Common
             {
 
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             { 
             
             }

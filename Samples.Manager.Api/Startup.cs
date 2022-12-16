@@ -20,6 +20,10 @@ using Microsoft.AspNetCore.Http;
 using Samples.Service.APP.Interface;
 using Samples.Service.APP.Common;
 using Infrastructure.Config;
+using AutoMapper;
+using Samples.Service.APP.AutoMapper;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 
 namespace Samples.Manager.Api
 {
@@ -42,7 +46,7 @@ namespace Samples.Manager.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            
+           // services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
             services.AddMvc().AddMvcOptions(options =>
             {
                 options.Filters.Add(typeof(TimmerFilter));
@@ -93,6 +97,7 @@ namespace Samples.Manager.Api
             services.AddAutofac();
             services.AddHttpClient<IHttpClientService, HttpClientService>();
 
+            services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
             services.AddCors(option => option.AddPolicy("samples", policy => policy.AllowAnyHeader()
                                                                                  .AllowAnyMethod()
                                                                                  .AllowCredentials()

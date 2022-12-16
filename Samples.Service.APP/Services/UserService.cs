@@ -43,8 +43,8 @@ namespace Samples.Service.APP.Services
         public async Task<ResultDto<bool>> SendValidCodeAsync(ValidCodeRQ rq)
         {
             //1.手机号,2邮箱
-            var receiverType = 0;
-           var s= CacheContext.Cache.Exists($"SMSCode");
+            var receiverType = 0;          
+            var s= CacheContext.Cache.Exists($"SMSCode");
             rq.Receiver = rq.Receiver.Trim().ToLower();//统一转为小写
             if (RegexHelper.Check(rq.Receiver, EnumPattern.Email))
             {

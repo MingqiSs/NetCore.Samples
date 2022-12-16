@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Samples.Service.APP.AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,10 +19,5 @@ namespace Samples.Service.APP.Interface
         /// <param name="errmsg"></param>
         /// <returns></returns>
         bool CheckValidationCode(string name, string code, string areaCode, out string errmsg);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        void PdfDemo();
     }
 }
