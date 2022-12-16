@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.CacheManager.Service
 {
@@ -295,6 +296,49 @@ namespace Infrastructure.CacheManager.Service
             return -2;
         }
 
+        /// <summary>
+        /// 获取redis锁
+        /// </summary>
+        /// <param name="key">锁名</param>
+        /// <param name="value">锁值</param>
+        /// <param name="exTime">过期时间--默认30秒</param>
+        /// <param name="whileIndex">循环拿锁次数--默认5次</param>
+        /// <param name="delayTime">每次等待时间默认1000毫秒</param>
+        /// <returns></returns>
+        public async  Task<bool> Redislock(string key, string value, int exTime = 30, int whileIndex = 5, int delayTime = 1000)
+        {
+            while (whileIndex > 0)
+            {
+                if (await _cache.StringSetAsync(key, value,TimeSpan.FromSeconds(exTime),When.NotExists))//等于Redis命令setnx和expire的结合体，是原子性的。
+                {
+                    return true;
+                }
+                whileIndex--;
+                await Task.Delay(delayTime);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 释放redis分布式锁
+        /// </summary>
+        /// <param name="key">锁名</param>
+        /// <param name="value">锁值（用来判断跟插入值是否一致，防止程序过慢导致删除第二次进入的锁）</param>
+        public async  Task UnRedislock(string key, string value)
+        {
+            try
+            {
+                string currentValue = await _cache.StringGetAsync(key);
+                if (!string.IsNullOrEmpty(currentValue) && currentValue.Equals(value))
+                {
+                    await _cache.KeyDeleteAsync(key);
+                }
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine("『redis分布式锁』解锁异常:" + e.ToString());
+            }
+        }
         public void Dispose()
         {
             if (_connection != null)
